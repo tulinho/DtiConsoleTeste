@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/DtiConsoleTeste/v15
+/ConsoleApp2/bin/Debug
+/ConsoleApp2/obj/Debug
+/packages
+/Testes/obj/Debug
+/UnitTestDtiConsoleTestes/obj/Debug
+/UnitTestDtiConsoleTestes/bin/Debug
