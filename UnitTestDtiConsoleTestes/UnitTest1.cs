@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ConsoleApp2;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UnitTestDtiConsoleTestes
 {
@@ -120,6 +122,72 @@ namespace UnitTestDtiConsoleTestes
                     return false;
             }
             return true;
+        }
+
+        [TestMethod]
+        public void TestFiltrarParesEElevarAoCubo()
+        {
+            Random geraRand = new Random();
+            List<int> lista = new List<int>();
+            for (int contador = 0; contador < geraRand.Next(20, 200); contador++)
+                lista.Add(geraRand.Next(2, 150));
+            List<int> cuboDosParesCorrecao = FiltrarParesEElevarAoCubo(lista.Distinct().ToList());
+            List<int> cuboDosParesExercicio = Program.FiltrarParesEElevarAoCubo(lista.Distinct().ToList());
+            Assert.AreEqual(cuboDosParesCorrecao.Count, cuboDosParesExercicio.Count);
+
+            cuboDosParesCorrecao.Sort();
+            cuboDosParesExercicio.Sort();
+            for (int contador = 0; contador < cuboDosParesExercicio.Count; contador++)
+                Assert.AreEqual(cuboDosParesCorrecao[contador], cuboDosParesExercicio[contador]);
+        }
+
+        public List<int> FiltrarParesEElevarAoCubo(List<int> lista)
+        {
+            return lista.Where(FiltrarNumerosPares()).Select(ElevarNumeroAoCubo()).ToList();
+        }
+
+        public Func<int, bool> FiltrarNumerosPares()
+        {
+            return m => m % 2 == 0;
+        }
+
+        public Func<int, int> ElevarNumeroAoCubo()
+        {
+            return m => m * m * m;
+        }
+        
+        [TestMethod]
+        public void TestMultiplicar()
+        {
+            Assert.AreEqual(Program.MultiplicarMmcMdc(15, 24, 33, CalcularMmc, CalcularMdc), Program.CalcularMultiplicacaoMmcMdc(15, 24, 33));
+            Assert.AreEqual(Program.MultiplicarMmcMdc(6, 8, 10, CalcularMmc, CalcularMdc), Program.CalcularMultiplicacaoMmcMdc(6, 8, 10));
+        }
+
+        public int CalcularMmc(int x, int y, int z)
+        {
+            return Mmc(x, Mmc(y, z));
+        }
+
+        private int Mmc(int y, int z)
+        {
+            return y * z / Mdc(y, z);
+        }
+
+        private int CalcularMdc(int x, int y, int z)
+        {
+            return Mdc(x, Mdc(y, z));
+        }
+
+        private int Mdc(int x, int y)
+        {
+            while (x != y)
+            {
+                if (x > y)
+                    x = x - y;
+                else
+                    y = y - x;
+            }
+            return x > 0 ? x : 1;
         }
     }
 }
